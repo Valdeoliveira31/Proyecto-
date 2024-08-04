@@ -12,6 +12,7 @@ class Pelicula:
         print(f"La fecha de lanzamiento es: {self.fecha_lanzamiento}")
         print(f"El Opening crawl es: {self.texto_inicial}")
         print(f"El director es: {self.director}")
-        
+        print("----------------------------------")
+
       
 

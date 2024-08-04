@@ -2,6 +2,6 @@ from APP import APP
 
 def main():
     app=APP()
-    app.APP()
+    app.start()
 main()
     
