@@ -1,3 +1,7 @@
+from APP import APP
+
 def main():
-    print("hola")
+    app=APP()
+    app.APP()
+main()
     
