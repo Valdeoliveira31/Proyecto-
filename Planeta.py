@@ -6,7 +6,7 @@ class Planeta:
         self.cantidad_habitantes=cantidad_habitantes
         self.clima=clima
         self.episodios=[]
-        self.personajes=[]
+        self.residentes=[]
     
     def show(self):
         print(f"El nombre del planeta es: {self.nombre}")
@@ -18,7 +18,7 @@ class Planeta:
         for episodio in self.episodios:
             print(f"-{episodio}")
         print("Los personajes originarios del planeta son:")
-        for personaje in self.personajes:
+        for personaje in self.residentes:
             print(f"-{personaje}")
         print("----------------------------------")
        

@@ -1,3 +1,4 @@
+import csv
 import requests
 from Especie import Especie
 from Nave import Nave
@@ -20,6 +21,8 @@ class APP:
     self.asociar_especies_con_peliculas()
     self.crear_planetas()
     self.asociar_planetas_con_peliculas()
+    ruta_residetes = "csv\planest.csv"
+    self.asociar_planeta_con_residentes(ruta_residetes)
     while True:
       print("BIENVENIDOS A STAR WARS METROPEDIA")
       opcion=input("""
@@ -125,10 +128,7 @@ Ingrese una opcion del menú principal:
 
         nuevo_planeta = Planeta(data_planeta["name"],data_planeta["orbital_period"],data_planeta["rotation_period"],data_planeta["population"],data_planeta["climate"])
 
-       # for personaje_url in data_planeta["residents"]:
-           #response_personaje = requests.get(personaje_url).json()
-           #nombre_personaje = response_personaje["result"]["properties"]["name"]
-           #nuevo_planeta.personajes.append(nombre_personaje)
+       
         self.planeta_obj.append(nuevo_planeta)
         #url = data["next"] 
 
@@ -138,6 +138,22 @@ Ingrese una opcion del menú principal:
            for planeta in self.planeta_obj:
               if planeta.nombre == planeta_name:
                  planeta.episodios.append(pelicula.titulo)
+
+  
+  def asociar_planeta_con_residentes(self, csv_file):
+     with open(csv_file, "r") as f:
+        lineas = f.readlines()
+        for linea in lineas[1:]:
+           columnas = linea.strip().split(",")
+           planeta_nombre = columnas[1]
+           residents = [r.strip() for r in columnas[11].split(",")]
+           for planeta in self.planeta_obj:
+              if planeta.nombre == planeta_nombre:
+                 planeta.residents.extend(planeta.residents)
+
+      
+                 
+           
      
 
     
