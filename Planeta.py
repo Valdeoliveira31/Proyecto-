@@ -16,4 +16,5 @@ class Planeta:
         print(f"El clima es: {self.clima}")
         print(f"Los episodios en los que aparece son: {self.episodios}")
         print(f"Los perosnajes originarios del planeta son: {self.personajes}")
+        print("----------------------------------")
         

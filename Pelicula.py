@@ -5,6 +5,10 @@ class Pelicula:
         self.fecha_lanzamiento=fecha_lanzamiento
         self.texto_inicial=texto_inicial
         self.director=director
+        self.especies=[]
+        self.planetas=[]
+        self.personajes=[]
+
 
     def show(self):
         print(f"El titulo de la pelicula es: {self.titulo}")

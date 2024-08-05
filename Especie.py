@@ -10,8 +10,14 @@ class Especie:
     
     def show(self):
         print(f"El nombre de la especie es: {self.nombre}")
+        print(f"Su altura es de: {self.altura}")
         print(f"Su clasificacion es: {self.clasificacion}")
         print(f"El planeta de origen es: {self.planeta_origen}")
         print(f"Su lengua materna es: {self.lengua_materna}")
-        print(f"Los episodios en los que aprecen son: {self.episodios}")
-        print(f"Los personajes que pertencen a esta especie son: {self.personajes}")
+        print("Los episodios en que aparecen son:")
+        for episodio in self.episodios:
+            print(f"-{episodio}")
+        print("Los personajes de esta especie son:")
+        for personaje in self.personajes:
+            print(f"-{personaje}")
+        print("----------------------------------")

@@ -16,6 +16,8 @@ class APP:
   
   def start(self):
     self.crear_peliculas()
+    self.crear_especies()
+    self.asociar_especies_con_peliculas()
     while True:
       print("BIENVENIDOS A STAR WARS METROPEDIA")
       opcion=input("""
@@ -35,7 +37,9 @@ Ingrese una opcion del menú principal:
          for pelicula in self.pelicula_obj:
             pelicula.show()
       elif opcion == "2":
-        None
+         for especie in self.especie_obj:
+            especie.show()
+       
       elif opcion == "3":
          None
       elif opcion == "4":
@@ -55,15 +59,52 @@ Ingrese una opcion del menú principal:
       else:
                 print("Debe ingresar una opcion del menú.")
 
-        # Funciones que premiten la creación de los objetos:
+# Funciones que premiten la creación de los objetos:
   def crear_peliculas(self):
-        url = "https://swapi.dev/api/films/"
-        response = requests.get(url)
-        data = response.json()
-        for pelicula in data["results"]:
-            self.pelicula_obj.append(Pelicula(pelicula["title"], pelicula["episode_id"], pelicula["release_date"], pelicula["opening_crawl"], pelicula["director"],))
-      
-   
+    url = "https://swapi.dev/api/films/"
+    response = requests.get(url)
+    data = response.json()
+    for pelicula in data["results"]:
+       self.pelicula_obj.append(Pelicula(pelicula["title"], pelicula["episode_id"], pelicula["release_date"], pelicula["opening_crawl"], pelicula["director"],))
+  
+       especies_pelicula = pelicula["species"]
+       for especie_url in especies_pelicula:  #Obtener la URL de cada especie
+          response_especie = requests.get(especie_url) 
+          data_especie = response_especie.json()
+          self.pelicula_obj[-1].especies.append(data_especie["name"])  # Porque fue el ultimo en insertarse
+
+  def crear_especies(self):
+    url = "https://www.swapi.tech/api/species/"
+    #while url:
+    response = requests.get(url)
+    data = response.json()
+    for especie in data["results"]:   
+        URL_especie = especie["url"]
+        response_especie = requests.get(URL_especie)  #Obtener la URL de cada especie
+        data_especie = response_especie.json()["result"]["properties"]
+        homeworld_url = data_especie.get("homeworld")  #Se obtiene su planeta
+        if homeworld_url:
+            response_planeta_origen = requests.get(homeworld_url)
+            data_planeta_origen = response_planeta_origen.json()["result"]["properties"]
+            nombre_planeta_origen = data_planeta_origen["name"]   #Se obtiene el nombre del planeta
+        else:
+            nombre_planeta_origen = "Desconocido"  #si no tiene planeta es desconocido
+        nueva_especie = Especie(data_especie["name"],data_especie["average_height"],data_especie["classification"],nombre_planeta_origen,data_especie["language"])
+            
+        for personaje_url in data_especie["people"]:
+            response_personaje = requests.get(personaje_url).json()
+            nombre_personaje = response_personaje["result"]["properties"]["name"]
+            nueva_especie.personajes.append(nombre_personaje)  #Se ponen los nombres de todos los personajes de la especie    
+            self.especie_obj.append(nueva_especie)
+        #url = data["next"]
+
+  def asociar_especies_con_peliculas(self):  #Se correlaciona las especies con su aparicion en las pelis
+     for pelicula in self.pelicula_obj:
+        for especie_name in pelicula.especies:  #Se obtiene los nombres de cada especie en cada peli
+           for especie in self.especie_obj:
+              if especie.nombre == especie_name:  #Se compara los nombres de especies en nuestra lista de especies con los nombres de las especies en cada peli
+                 especie.episodios.append(pelicula.titulo)  
+
 
     
     
