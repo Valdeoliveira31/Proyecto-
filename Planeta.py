@@ -14,7 +14,12 @@ class Planeta:
         print(f"Su período de rotación es: {self.periodo_rotacion}")
         print(f"La cantidad de habitantes son: {self.cantidad_habitantes}")
         print(f"El clima es: {self.clima}")
-        print(f"Los episodios en los que aparece son: {self.episodios}")
-        print(f"Los perosnajes originarios del planeta son: {self.personajes}")
+        print("Los episodios en que aparecen son:")
+        for episodio in self.episodios:
+            print(f"-{episodio}")
+        print("Los personajes originarios del planeta son:")
+        for personaje in self.personajes:
+            print(f"-{personaje}")
         print("----------------------------------")
+       
         

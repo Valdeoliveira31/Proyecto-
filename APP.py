@@ -18,6 +18,8 @@ class APP:
     self.crear_peliculas()
     self.crear_especies()
     self.asociar_especies_con_peliculas()
+    self.crear_planetas()
+    self.asociar_planetas_con_peliculas()
     while True:
       print("BIENVENIDOS A STAR WARS METROPEDIA")
       opcion=input("""
@@ -39,9 +41,9 @@ Ingrese una opcion del menú principal:
       elif opcion == "2":
          for especie in self.especie_obj:
             especie.show()
-       
       elif opcion == "3":
-         None
+         for planeta in self.planeta_obj:
+            planeta.show() 
       elif opcion == "4":
          None
       elif opcion == "5":
@@ -72,7 +74,13 @@ Ingrese una opcion del menú principal:
           response_especie = requests.get(especie_url) 
           data_especie = response_especie.json()
           self.pelicula_obj[-1].especies.append(data_especie["name"])  # Porque fue el ultimo en insertarse
-
+       
+       planteas_pelicula = pelicula["planets"]
+       for planeta_url in planteas_pelicula:
+          response_planeta = requests.get(planeta_url)
+          data_planeta = response_planeta.json()
+          self.pelicula_obj[-1].planetas.append(data_planeta["name"])
+ 
   def crear_especies(self):
     url = "https://www.swapi.tech/api/species/"
     #while url:
@@ -105,6 +113,32 @@ Ingrese una opcion del menú principal:
               if especie.nombre == especie_name:  #Se compara los nombres de especies en nuestra lista de especies con los nombres de las especies en cada peli
                  especie.episodios.append(pelicula.titulo)  
 
+  def crear_planetas(self):
+    url = "https://www.swapi.tech/api/planets/"
+    #while url:
+    response = requests.get(url)
+    data = response.json()
+    for planeta in data["results"]:
+        URL_planeta = planeta["url"]
+        response_planeta =requests.get(URL_planeta)
+        data_planeta = response_planeta.json()["result"]["properties"]
+
+        nuevo_planeta = Planeta(data_planeta["name"],data_planeta["orbital_period"],data_planeta["rotation_period"],data_planeta["population"],data_planeta["climate"])
+
+       # for personaje_url in data_planeta["residents"]:
+           #response_personaje = requests.get(personaje_url).json()
+           #nombre_personaje = response_personaje["result"]["properties"]["name"]
+           #nuevo_planeta.personajes.append(nombre_personaje)
+        self.planeta_obj.append(nuevo_planeta)
+        #url = data["next"] 
+
+  def asociar_planetas_con_peliculas(self):
+     for pelicula in self.pelicula_obj:
+        for planeta_name in pelicula.planetas:
+           for planeta in self.planeta_obj:
+              if planeta.nombre == planeta_name:
+                 planeta.episodios.append(pelicula.titulo)
+     
 
     
     
