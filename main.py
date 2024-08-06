@@ -1,3 +1,8 @@
+from APP import APP
+
 def main():
-    print("hola")
+    print("Bienvenido a la APP")
+    aplicacion = APP()
+    aplicacion.start()
+main()
     
