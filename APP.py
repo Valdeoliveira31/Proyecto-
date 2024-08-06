@@ -21,7 +21,7 @@ class APP:
     self.asociar_especies_con_peliculas()
     self.crear_planetas()
     self.asociar_planetas_con_peliculas()
-    ruta_residetes = "csv\planest.csv"
+    ruta_residetes = "csv/planets.csv"
     self.asociar_planeta_con_residentes(ruta_residetes)
     while True:
       print("BIENVENIDOS A STAR WARS METROPEDIA")
@@ -86,28 +86,28 @@ Ingrese una opcion del menú principal:
  
   def crear_especies(self):
     url = "https://www.swapi.tech/api/species/"
-    #while url:
-    response = requests.get(url)
-    data = response.json()
-    for especie in data["results"]:   
-        URL_especie = especie["url"]
-        response_especie = requests.get(URL_especie)  #Obtener la URL de cada especie
-        data_especie = response_especie.json()["result"]["properties"]
-        homeworld_url = data_especie.get("homeworld")  #Se obtiene su planeta
-        if homeworld_url:
-            response_planeta_origen = requests.get(homeworld_url)
-            data_planeta_origen = response_planeta_origen.json()["result"]["properties"]
-            nombre_planeta_origen = data_planeta_origen["name"]   #Se obtiene el nombre del planeta
-        else:
-            nombre_planeta_origen = "Desconocido"  #si no tiene planeta es desconocido
-        nueva_especie = Especie(data_especie["name"],data_especie["average_height"],data_especie["classification"],nombre_planeta_origen,data_especie["language"])
+    while url:
+       response = requests.get(url)
+       data = response.json()
+       for especie in data["results"]:   
+          URL_especie = especie["url"]
+          response_especie = requests.get(URL_especie)  #Obtener la URL de cada especie
+          data_especie = response_especie.json()["result"]["properties"]
+          homeworld_url = data_especie.get("homeworld")  #Se obtiene su planeta
+          if homeworld_url:
+             response_planeta_origen = requests.get(homeworld_url)
+             data_planeta_origen = response_planeta_origen.json()["result"]["properties"]
+             nombre_planeta_origen = data_planeta_origen["name"]   #Se obtiene el nombre del planeta
+          else:
+             nombre_planeta_origen = "Desconocido"  #si no tiene planeta es desconocido
+          nueva_especie = Especie(data_especie["name"],data_especie["average_height"],data_especie["classification"],nombre_planeta_origen,data_especie["language"])
             
-        for personaje_url in data_especie["people"]:
+          for personaje_url in data_especie["people"]:
             response_personaje = requests.get(personaje_url).json()
             nombre_personaje = response_personaje["result"]["properties"]["name"]
             nueva_especie.personajes.append(nombre_personaje)  #Se ponen los nombres de todos los personajes de la especie    
             self.especie_obj.append(nueva_especie)
-        #url = data["next"]
+       url = data["next"]
 
   def asociar_especies_con_peliculas(self):  #Se correlaciona las especies con su aparicion en las pelis
      for pelicula in self.pelicula_obj:
@@ -118,7 +118,6 @@ Ingrese una opcion del menú principal:
 
   def crear_planetas(self):
     url = "https://www.swapi.tech/api/planets/"
-    #while url:
     response = requests.get(url)
     data = response.json()
     for planeta in data["results"]:
@@ -128,10 +127,8 @@ Ingrese una opcion del menú principal:
 
         nuevo_planeta = Planeta(data_planeta["name"],data_planeta["orbital_period"],data_planeta["rotation_period"],data_planeta["population"],data_planeta["climate"])
 
-       
         self.planeta_obj.append(nuevo_planeta)
-        #url = data["next"] 
-
+      
   def asociar_planetas_con_peliculas(self):
      for pelicula in self.pelicula_obj:
         for planeta_name in pelicula.planetas:
@@ -141,16 +138,15 @@ Ingrese una opcion del menú principal:
 
   
   def asociar_planeta_con_residentes(self, csv_file):
-     with open(csv_file, "r") as f:
-        lineas = f.readlines()
-        for linea in lineas[1:]:
-           columnas = linea.strip().split(",")
-           planeta_nombre = columnas[1]
-           residents = [r.strip() for r in columnas[11].split(",")]
+     with open(csv_file, newline= "", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+           planeta_nombre = row["name"]
+           residents = row["residents"].strip().split(", ")
            for planeta in self.planeta_obj:
               if planeta.nombre == planeta_nombre:
-                 planeta.residents.extend(planeta.residents)
-
+                 planeta.residentes.extend(residents)
+        
       
                  
            
