@@ -17,3 +17,7 @@ class Nave:
         self.pilots=pilots
         self.films=films
 
+    def show_nombre(self):
+        print(self.name)
+
+        

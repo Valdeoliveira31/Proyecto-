@@ -1,0 +1,28 @@
+[
+   {
+      "nombre_mision": "Salvar a Maria Gabriela",
+      "planeta_destino": 5,
+      "nave": 1,
+      "integrantes": [
+         6,
+         2,
+         4
+      ],
+      "armas": [
+         "Lightsaber",
+         "DL-44 Blaster Pistol",
+         "E-11 Blaster Rifle"
+      ]
+   },
+   {
+      "nombre_mision": "Salvar a Lima",
+      "planeta_destino": 12,
+      "nave": 40,
+      "integrantes": [
+         1
+      ],
+      "armas": [
+         "DL-44 Blaster Pistol"
+      ]
+   }
+]

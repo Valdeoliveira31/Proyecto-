@@ -7,3 +7,6 @@ class Planeta_CSV:
         self.residents=residents
         self.films=films
 
+    def show_nombre(self):
+        print(f"{self.id}.{self.name}")
+        
