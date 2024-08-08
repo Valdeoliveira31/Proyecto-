@@ -8,6 +8,12 @@ from Pelicula import Pelicula
 from Personaje import Personaje
 from Planeta import Planeta
 from Vehiculo import Vehiculo
+from Personaje_CSV import Personaje_CSV
+from Planeta_CSV import Planeta_CSV
+from Arma import Arma
+from Mision import Mision
+import json
+
 
 class APP:
   especie_obj=[]
@@ -16,6 +22,11 @@ class APP:
   persona_obj=[]
   planeta_obj=[]
   vehiculo_obj=[]
+  lista_planetas_csv=[]
+  lista_naves=[]
+  lista_personajes_csv=[]
+  lista_misiones=[]
+  lista_armas=[]
   
   def start(self):
     
@@ -330,6 +341,12 @@ Ingrese una opcion del menú principal:
      #Mostrar tabla
      with pd.option_context('display.max_rows',None,'display.max_columns', None):
         print(estadisticas)
+
+  def cargar_datos_csv(self):
+      #Agregar planetas a la lista
+      planetas=pd.read_csv("csv/planets.csv")  #Lectura del Csv de los planetas
+      
+
      
         
 
