@@ -9,4 +9,14 @@ class Planeta_CSV:
 
     def show_nombre(self):
         print(f"{self.id}.{self.name}")
-        
+    
+    def show_datos(self):
+        print(f"""
+------------------Datos del planeta {self.name}--------------------
+>ID:{self.id}
+>Poblacion:{self.population} habitantes
+>Clima:{self.climate}
+>Residentes:{self.residents}
+>Episodios en los que aparece:{self.films}
+--------------------------------------------------------------------
+""")

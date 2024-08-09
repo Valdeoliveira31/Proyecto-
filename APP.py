@@ -230,7 +230,7 @@ Ingrese una opcion del menú principal:
                       especie_personaje=especie.nombre
            self.persona_obj.append(Personaje(nombre_personaje,planeta_personaje,genero_personaje,lista_naves,lista_espisodios,lista_vehiculos, especie_personaje))
         url=data["next"]
-
+  
   def buscar_personaje(self):
      nombre = input("Introduzca los caracteres del personaje que desea buscar: ")
      contador =1
@@ -605,6 +605,35 @@ Ingrese una opcion del menú principal:
          n.show_datos()
          contador+=1
      print("-------------------------------------------------------------------------------")
+     while True:
+         try:
+             escoger=int(input("Seleccione la mision que desee visualizar a detalle: "))
+             mision_escogida=self.lista_misiones[escoger-1]
+             while True:
+                 ver=int(input("Que elemento deseas ver a detalle \n1-->Planeta Destino \n2-->Detalle de integrantes \n3-->Detalle Armas \n4-->Detalle Nave \n--> "))
+                 if ver==1:
+                     mision_escogida.planeta_destino.show_datos()
+                     break
+                 elif ver==2:
+                     for i in mision_escogida.integrantes:
+                         i.show_datos()
+                     print("-----------------------------------------------------------------------------------------------------")
+                     break
+                 elif ver==3:
+                     for i in mision_escogida.armas:
+                         i.show_datos()
+                     print("-------------------------------------------------------------------------------------------------------")
+                     break
+                 elif ver==4:
+                     mision_escogida.nave.show_datos()
+                     break
+                 else:
+                         print("ingrese una opcion valida")
+             continuar=input("Desea ver de nuevo los detalles de una mision? \nsi \nno \n---> ")
+             if continuar=="no":
+                 break
+         except:
+             print("Ingrese una opcion valida")
 
   def guardar_mision(self):
      lista_dic_misiones=[]

@@ -92,15 +92,25 @@ def crear_mision():
          nombre_mision=input("Ingrese el nombre para su mision: ") #Nombre de la mision
          for n in lista_planetas:
              n.show_nombre()
-         ingreso_planeta=int(input("Escoja el planeta a donde desea realizar la mision: "))
-         planeta_escogido=lista_planetas[ingreso_planeta-1] #Planeta Escogido
+         while True:
+             try:
+                 ingreso_planeta=int(input("Escoja el planeta a donde desea realizar la mision: "))
+                 planeta_escogido=lista_planetas[ingreso_planeta-1] #Planeta Escogido
+                 break
+             except:
+                 print("Ingrese una opcion valida")
 
          contador_nave=1
          for n in lista_naves:
              print(f"{contador_nave}.-{n.name}")
              contador_nave+=1
-         ingreso_nave=int(input("Indique el numero de la nave que desea para la mision: "))
-         nave_escogida=lista_naves[ingreso_nave-1] #Nave escogida
+         while True:
+             try:
+                 ingreso_nave=int(input("Indique el numero de la nave que desea para la mision: "))
+                 nave_escogida=lista_naves[ingreso_nave-1] #Nave escogida
+                 break
+             except:
+                 print("Ingrese una opcion valida")
 
          personajes_mision=[]#Lista para personajes de la mision
          contador_personaje=1
@@ -110,17 +120,27 @@ def crear_mision():
              print(f"{contador_personaje}.-{n.name}")
              contador_personaje+=1
          while len(personajes_mision)<=7: #Asegurarse de que la lista puede tener maximo 7 personajes
-             ingreso_personaje=int(input(f"Seleccione los integrantes para su mision (Restantes: {restantes_personajes}) \nIngrese el numero del personaje--> "))
-             personaje_escogido=lista_personajes[ingreso_personaje-1]
-             if personaje_escogido in personajes_mision:
-                 print(f"{personaje_escogido.name} ya se encuentra en la mision") #Asegurarse de no repetir integrantes
-             else:
-                 personajes_mision.append(personaje_escogido) #Agregar personaje a la lista
-                 continuar=input("Desea agregar otro personaje? \nsi \nno \n--> ")
-                 restantes_personajes-=1
-            
-             if continuar=="no":
-                 break
+             try:
+                 ingreso_personaje=int(input(f"Seleccione los integrantes para su mision (Restantes: {restantes_personajes}) \nIngrese el numero del personaje--> "))
+                 personaje_escogido=lista_personajes[ingreso_personaje-1]
+                 if personaje_escogido in personajes_mision:
+                     print(f"{personaje_escogido.name} ya se encuentra en la mision") #Asegurarse de no repetir integrantes
+                 else:
+                     personajes_mision.append(personaje_escogido) #Agregar personaje a la lista
+                     restantes_personajes-=1
+                     while True:
+                         try:
+                             continuar=input("Desea agregar otro personaje? \nsi \nno \n--> ")
+                             if continuar=="si":
+                                 break
+                             elif continuar=="no":
+                                 break
+                         except:
+                             print("Ingrese una opcion valida")
+                     if continuar=="no":
+                         break
+             except:
+                 print("Ingrese una opcion valida")
 
          armas_mision=[] #Lista de armas para la mision
          contador_armas=1
@@ -130,24 +150,34 @@ def crear_mision():
              print(f"{contador_armas}.-{n.name}")
              contador_armas+=1
          while len(armas_mision)<=7: #Asegurarse de cumplir el maximo de 7 armas
-             ingreso_arma=int(input(f"Seleccione las armas para su mision (Restantes: {restantes_armas}) \nIngrese el numero del arma---> "))
-             arma_escogida=lista_armas[ingreso_arma-1]
-             armas_mision.append(arma_escogida) #Agregar el arma, si pueden haber armas repetidas por ser armas
-             continuar=input("Desea agregar otra arma? \nsi \nno \n--> ")
-             restantes_armas-=1
-             if continuar=="no":
-                 break
+             try: #Validador del ingreso de arma
+                 ingreso_arma=int(input(f"Seleccione las armas para su mision (Restantes: {restantes_armas}) \nIngrese el numero del arma---> "))
+                 arma_escogida=lista_armas[ingreso_arma-1]
+                 armas_mision.append(arma_escogida) #Agregar el arma, si pueden haber armas repetidas por ser armas
+                 restantes_armas-=1
+                 while True: #Validador de la pregunta continuar
+                     try:
+                         continuar=input("Desea agregar otra arma? \nsi \nno \n--> ")
+                         if continuar=="si" or continuar=="no":
+                             break
+                     except:
+                         print("Ingrese si o no")
+                 
+                 if continuar=="no":
+                     break
+             except:
+                 print("Ingrese una opcion valida")
          
          lista_misiones.append(Mision(nombre_mision,planeta_escogido,nave_escogida,personajes_mision,armas_mision)) #Agregar mision a la lista de misiones
 
          otra_mision=input("Desea crear una nueva mision? \nsi \nno \n---> ") 
+         
          if otra_mision=="no":
              print("QUE LA FUERZA TE ACOMPAÑE")
              break
-         else:
-             i+=1
+                 
 
-crear_mision()
+
 
 def modificar_mision():
      contador=1
@@ -273,7 +303,7 @@ def modificar_mision():
          if continuar=="no":
             break
 
-modificar_mision()
+
 
 def visualizar_mision():
      print("--------------------------LISTA DE MISIONES----------------------")
@@ -283,6 +313,37 @@ def visualizar_mision():
          n.show_datos()
          contador+=1
      print("-------------------------------------------------------------------------------")
+     while True:
+         try:
+             escoger=int(input("Seleccione la mision que desee visualizar a detalle: "))
+             mision_escogida=lista_misiones[escoger-1]
+             while True:
+                 ver=int(input("Que elemento deseas ver a detalle \n1-->Planeta Destino \n2-->Detalle de integrantes \n3-->Detalle Armas \n4-->Detalle Nave \n--> "))
+                 if ver==1:
+                     mision_escogida.planeta_destino.show_datos()
+                     break
+                 elif ver==2:
+                     for i in mision_escogida.integrantes:
+                         i.show_datos()
+                     print("-----------------------------------------------------------------------------------------------------")
+                     break
+                 elif ver==3:
+                     for i in mision_escogida.armas:
+                         i.show_datos()
+                     print("-------------------------------------------------------------------------------------------------------")
+                     break
+                 elif ver==4:
+                     mision_escogida.nave.show_datos()
+                     break
+                 else:
+                         print("ingrese una opcion valida")
+             continuar=input("Desea ver de nuevo los detalles de una mision? \nsi \nno \n---> ")
+             if continuar=="no":
+                 break
+         except:
+             print("Ingrese una opcion valida")
+    
+         
 
 visualizar_mision()
 
@@ -306,4 +367,4 @@ def guardar_mision():
      with open("guardado_misiones/misiones_guardadas.txt","w") as f:
          f.write(json.dumps(lista_dic_misiones, indent=3))
 
-guardar_mision()
+
