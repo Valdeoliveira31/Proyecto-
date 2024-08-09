@@ -370,13 +370,18 @@ def modificar_mision():
                  else:
                      print("No se tienen armas en la mision")
         
-         continuar=input("Desea modificar otra aspecto de la mision? \nsi \nno \n---> ")
+         
+         while True:
+             continuar=input("Desea modificar otra aspecto de la mision? \nsi \nno \n---> ")
+             if continuar=="no":
+                 break
+             elif continuar=="si":
+                 break
+             else:
+                 print("Ingrese si o no")
          if continuar=="no":
              break
-         elif continuar=="si":
-             None
-         else:
-             print("Ingrese si o no")
+         
 
 modificar_mision()
 

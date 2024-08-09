@@ -21,7 +21,6 @@ class APP:
   pelicula_obj=[]
   persona_obj=[]
   planeta_obj=[]
-  vehiculo_obj=[]
   lista_planetas_csv=[]
   lista_naves=[]
   lista_personajes_csv=[]
@@ -29,16 +28,19 @@ class APP:
   lista_armas=[]
   i=1
   def start(self):
-    self.crear_peliculas()
-    self.crear_especies()
-    self.asociar_especies_con_peliculas()
-    self.crear_planetas()
-    self.asociar_planetas_con_peliculas()
-    ruta_residetes = "csv/planets.csv"
-    self.asociar_planeta_con_residentes(ruta_residetes)
-    self.agregar_personajes()
-    self.cargar_datos()
-    self.cargar_mision()
+    try:
+         self.crear_peliculas()
+         self.crear_especies()
+         self.asociar_especies_con_peliculas()
+         self.crear_planetas() #Borrar
+         self.asociar_planetas_con_peliculas() #Borrar
+         ruta_residetes = "csv/planets.csv" #Borrar
+         self.asociar_planeta_con_residentes(ruta_residetes) #Borrar
+         self.agregar_personaje()
+         self.cargar_datos()
+         self.cargar_mision()
+    except:
+         print("No se pudieron cargar correctamente los datos")
     
     while True:
       print("BIENVENIDOS A STAR WARS METROPEDIA")
@@ -68,6 +70,7 @@ Ingrese una opcion del menú principal:
       elif opcion == "3":
          for planeta in self.planeta_obj:
             planeta.show() 
+         print("--------------------------------------------------")
       elif opcion == "4":
          self.buscar_personaje()
       elif opcion == "5":
@@ -146,7 +149,7 @@ Ingrese una opcion del menú principal:
               if especie.nombre == especie_name:  #Se compara los nombres de especies en nuestra lista de especies con los nombres de las especies en cada peli
                  especie.episodios.append(pelicula.titulo)  
 
-  def crear_planetas(self):
+  def crear_planetas(self): #BORRAR
     url = "https://www.swapi.tech/api/planets/"
     response = requests.get(url)
     data = response.json()
@@ -159,7 +162,7 @@ Ingrese una opcion del menú principal:
 
         self.planeta_obj.append(nuevo_planeta)
       
-  def asociar_planetas_con_peliculas(self):
+  def asociar_planetas_con_peliculas(self): #BORRAR
      for pelicula in self.pelicula_obj:
         for planeta_name in pelicula.planetas:
            for planeta in self.planeta_obj:
@@ -167,7 +170,7 @@ Ingrese una opcion del menú principal:
                  planeta.episodios.append(pelicula.titulo)
 
   
-  def asociar_planeta_con_residentes(self, csv_file):
+  def asociar_planeta_con_residentes(self, csv_file): #BORRAR
      with open(csv_file, newline= "", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -177,66 +180,60 @@ Ingrese una opcion del menú principal:
               if planeta.nombre == planeta_nombre:
                  planeta.residentes.extend(residents)
         
-  def agregar_personajes(self):
-     url= 'https://www.swapi.tech/api/people/'
-     while url: 
-        response= requests.get(url)
-        data = response.json()
-        for personaje in data["results"]:
-           url_personaje= personaje["url"]
-           response_personaje= requests.get(url_personaje)
-           data_personaje= response_personaje.json()["result"]["properties"]
-           nombre_personaje= data_personaje["name"]
-           genero_personaje= data_personaje["gender"]
-           homeworld_url= data_personaje["homeworld"]
-           if homeworld_url:
-             response_homeworld= requests.get(homeworld_url)
-             data_homeworld= response_homeworld.json()["result"]["properties"]
-             planeta_personaje= data_homeworld["name"]
-           else:
-              planeta_personaje="Desconocido"
-           lista_naves=[]
-           response_naves= requests.get('https://www.swapi.tech/api/starships/')
-           data_naves= response_naves.json()["results"]
-           for nave in data_naves:
-               url_nave= nave["url"]
-               response_nave= requests.get(url_nave)
-               data_nave= response_nave.json()["result"]["properties"]
-               for piloto in data_nave["pilots"]:
-                  if url_personaje ==piloto:
-                     lista_naves.append(data_nave["name"])
-           lista_espisodios=[]
-           response_espisodios= requests.get("https://www.swapi.tech/api/films/")
-           data_espisodios= response_espisodios.json()["result"]
-           for n in data_espisodios:
-              for personaje in n["properties"]["characters"]:
-                 if personaje ==url_personaje:
-                    lista_espisodios.append(n["properties"]["title"])
-           lista_vehiculos=[]
-           response_vehiculos= requests.get('https://www.swapi.tech/api/vehicles/')
-           data_vehiculos= response_vehiculos.json()["results"]
-           for vehiculo in data_vehiculos:
-             url_vehiculo= vehiculo["url"]
-             response_vehiculo= requests.get(url_vehiculo)
-             data_vehiculo= response_vehiculo.json()["result"]["properties"]
-             for conductor in data_vehiculo["pilots"]:
-                if conductor ==url_personaje:
-                   lista_vehiculos.append(data_vehiculo["name"])
-           especie_personaje="Desconocido"
-           for especie in self.especie_obj:
-              for persona in especie.personajes:
-                  if persona==nombre_personaje:
-                      especie_personaje=especie.nombre
-           self.persona_obj.append(Personaje(nombre_personaje,planeta_personaje,genero_personaje,lista_naves,lista_espisodios,lista_vehiculos, especie_personaje))
-        url=data["next"]
+  def agregar_personaje(self):
+    url="https://swapi.dev/api/people"
+    while url:
+     response=requests.get(url)
+     data_url=response.json()
+     data=response.json()["results"]
+     for personaje in data:
+         nombre_personaje=personaje["name"]
+         genero_personaje=personaje["gender"]
+         homeworld_url=personaje["homeworld"]
+         if homeworld_url:
+             response_homeworld=requests.get(homeworld_url)
+             data_homeworld=response_homeworld.json()
+             planeta_personaje=data_homeworld["name"]
+         else:
+             planeta_personaje="Desconocido"
+         lista_naves=[]
+         for url_nave in personaje["starships"]:
+             if url_nave:
+                 response_nave=requests.get(url_nave)
+                 data_nave=response_nave.json()
+                 lista_naves.append(data_nave["name"])
+             else:
+                 lista_naves.append("No posee naves")
+         lista_episodios=[]
+         for url_episodio in personaje["films"]:
+             if url_episodio:
+                 response_episodio=requests.get(url_episodio)
+                 data_episodio=response_episodio.json()
+                 lista_episodios.append(data_episodio["title"])
+             else:
+                 lista_naves.append("No sale en ningun episodio")
+         lista_vehiculos=[]
+         for url_vehiculo in personaje["vehicles"]:
+             if url_vehiculo:
+                 response_vehiculo=requests.get(url_vehiculo)
+                 data_vehiculo=response_vehiculo.json()
+                 lista_vehiculos.append(data_vehiculo["name"])
+             else:
+                 lista_vehiculos.append("No posee ningun vehiculo")
+         if personaje["species"]:
+             especie_personaje=personaje["species"]
+         else:
+             especie_personaje="Desconocido"
+         self.persona_obj.append(Personaje(nombre_personaje,planeta_personaje,genero_personaje,lista_naves,lista_episodios,lista_vehiculos,especie_personaje))
+     url=data_url["next"] 
   
   def buscar_personaje(self):
-     nombre = input("Introduzca los caracteres del personaje que desea buscar: ")
+     nombre = input("Introduzca los caracteres del personaje que desea buscar: ").lower()
      contador =1
      lista_coinciden=[]
      print("Lista de personajes que coinciden con la busqueda")
      for personaje in self.persona_obj:
-        if nombre in personaje.nombre:
+        if nombre in personaje.nombre.lower():
            lista_coinciden.append(personaje)
            print(f"{contador}.{personaje.nombre}")
            contador+=1
@@ -508,14 +505,23 @@ Ingrese una opcion del menú principal:
          print(f"{contador}.Mision {n.nombre} Planeta DEstino-->{n.planeta_destino.name}")
          contador+=1
      print("-----------------------------------------------------")
-     seleccion=int(input("Seleccione la mision a modificar: "))
-     mision_seleccionada=self.lista_misiones[seleccion-1]
-     mision_seleccionada.show_datos()
+     while True:
+         try:
+             seleccion=int(input("Seleccione la mision a modificar: "))
+             mision_seleccionada=self.lista_misiones[seleccion-1]
+             mision_seleccionada.show_datos()
+             break
+         except:
+             print("Ingrese una opcion valida")
 
      while True:
          print("-----------MODIFICANDO LA MISION-------------")
-         cambiar=int(input("Que aspecto desea modificar \n1.--->Nombre de la mision \n2.--->Planeta de la mision \n3.--->Nave del planeta \n4.--->Integrantes de la mision \n5.--->Armas de la mision \n---> "))
-         
+         while True:
+             try:
+                 cambiar=int(input("Que aspecto desea modificar \n1.--->Nombre de la mision \n2.--->Planeta de la mision \n3.--->Nave del planeta \n4.--->Integrantes de la mision \n5.--->Armas de la mision \n---> "))
+                 break
+             except:
+                 print("Ingrese una opcion valida")
          if cambiar==1: #Opcion para cambiar nombre de la mision
              nuevo_nombre=input("Ingrese el nuevo nombre de la mision: ")
              mision_seleccionada.nombre=nuevo_nombre
@@ -523,12 +529,18 @@ Ingrese una opcion del menú principal:
          elif cambiar==2: #Opcion para cambiar el planeta de la mision
              for n in self.lista_planetas_csv:
                  n.show_nombre() #Mostrar la lista de planetas
-             escoger_planeta=int(input("Ingrese el numero del nuevo planeta destino de la mision: ")) 
-             nuevo_planeta=self.lista_planetas_csv[escoger_planeta-1]
-             if nuevo_planeta.name==mision_seleccionada.planeta_destino.name: #En caso de que se escoja el mismo planeta
-                 print("Ya se tiene ese planeta de destino configurado")
-             else:
-                 mision_seleccionada.planeta_destino=nuevo_planeta #Cambiar el nuevo planeta
+             while True:
+                 try:
+                     escoger_planeta=int(input("Ingrese el numero del nuevo planeta destino de la mision: ")) 
+                     nuevo_planeta=self.lista_planetas_csv[escoger_planeta-1]
+                     if nuevo_planeta.name==mision_seleccionada.planeta_destino.name: #En caso de que se escoja el mismo planeta
+                         print("Ya se tiene ese planeta de destino configurado")
+                         break
+                     else:
+                         mision_seleccionada.planeta_destino=nuevo_planeta #Cambiar el nuevo planeta
+                         break
+                 except:
+                     print("Ingrese una opcion valida")
 
          elif cambiar==3: #Opcion para cambiar la nave
              contador=1
@@ -536,15 +548,26 @@ Ingrese una opcion del menú principal:
              for n in self.lista_naves:
                  print(f"{contador}.{n.name}") #Mostrar las naves
                  contador+=1
-             escoger_nave=int(input("Ingrese el numero de la nueva nave: ")) #Escoger la nave
-             nueva_nave=self.lista_naves[escoger_nave-1]
-             if nueva_nave.name==mision_seleccionada.nave.name: #En caso de que se escoja la misma nave
-                 print("Ya se tiene esta nave para la mision")
-             else:
-                 mision_seleccionada.nave=nueva_nave 
+             while True:
+                 try:
+                     escoger_nave=int(input("Ingrese el numero de la nueva nave: ")) #Escoger la nave
+                     nueva_nave=self.lista_naves[escoger_nave-1]
+                     if nueva_nave.name==mision_seleccionada.nave.name: #En caso de que se escoja la misma nave
+                         print("Ya se tiene esta nave para la mision")
+                         break
+                     else:
+                         mision_seleccionada.nave=nueva_nave 
+                         break
+                 except:
+                     print("Ingrese una opcion valida")
 
          elif cambiar==4: #Opcion para modificar los integrantes
-             modificar=int(input("Que accion desea realizar \n1-->Agregar Integrante \n2-->Eliminar Integrante \n3-->Cambiar Integrante \n-->"))
+             while True:
+                 try:
+                     modificar=int(input("Que accion desea realizar \n1-->Agregar Integrante \n2-->Eliminar Integrante \n3-->Cambiar Integrante \n-->"))
+                     break
+                 except:
+                     print("Ingrese una opcion valida")
              contador=1
              for n in mision_seleccionada.integrantes: #Mostrar los integrantes de la mision seleccionada
                  print(f"{contador}.{n.name}")
@@ -556,42 +579,67 @@ Ingrese una opcion del menú principal:
                      for n in self.lista_personajes_csv:
                          print(f"{contador_1}.{n.name}") #Mostrar lista de personajes
                          contador_1+=1
-                     try:
-                         agregar_personaje=int(input("Seleccione el numero del personaje que desea agregar: "))
-                         personaje_agregar=self.lista_personajes_csv[agregar_personaje-1]
-                         if personaje_agregar in mision_seleccionada.integrantes: #En caso de que ya se tenga el personaje
-                             print("Ya se tiene a este integrante en la mision")
-                         else:
-                             mision_seleccionada.integrantes.append(personaje_agregar)
-                     except ValueError:
-                         print("Ingrese un numero porfavor") 
+                     while True:
+                         try:
+                             agregar_personaje=int(input("Seleccione el numero del personaje que desea agregar: "))
+                             personaje_agregar=self.lista_personajes_csv[agregar_personaje-1]
+                             if personaje_agregar in mision_seleccionada.integrantes: #En caso de que ya se tenga el personaje
+                                 print("Ya se tiene a este integrante en la mision")
+                                 break
+                             else:
+                                 mision_seleccionada.integrantes.append(personaje_agregar)
+                                 break
+                         except:
+                             print("Ingrese un numero porfavor") 
                  else:
                      print("Ya tiene el maximo de integrantes posibles") #En caso de que ya se tengan siete integrantes
 
              elif modificar==2:  #En caso de que se desee eliminar un integrante
-                 escoger_eliminar=int(input("Ingrese el numero del personaje que desee eliminar"))
-                 mision_seleccionada.integrantes.pop(escoger_eliminar-1)
+                 if len(mision_seleccionada.integrantes)>0:
+                     while True:
+                         try:
+                             escoger_eliminar=int(input("Ingrese el numero del personaje que desee eliminar"))
+                             mision_seleccionada.integrantes.pop(escoger_eliminar-1)
+                             break
+                         except:
+                             print("Ingrese una opcion valida")
+                 else:
+                     print("No se tienen integrantes en la mision")
         
              elif modificar==3:  #En caso de que se desee cambiar un integrante
-                 escoger_cambio=int(input("Ingrese el numero del personaje que desea cambiar: "))
-                 contador_2=1
-                 print("Lista de Personajes")
-                 for n in self.lista_personajes_csv: 
-                     print(f"{contador_2}.{n.name}")        #Mostrar los personajes
-                     contador_2+=1
-                 escoger_nuevo=int(input("Ingrese el numero del personaje nuevo para el cambio: "))
-                 personaje_cambiar=self.lista_personajes_csv[escoger_nuevo-1]
-                 if personaje_cambiar in mision_seleccionada.integrantes:      #En caso de que ya se tenga el personaje en la mision
-                     print("Ya se tiene este personaje en la mision")
+                 if len(mision_seleccionada.integrantes)>0:
+                     while True:
+                         try:
+                             escoger_cambio=int(input("Ingrese el numero del personaje que desea cambiar: "))
+                             contador_2=1
+                             print("Lista de Personajes")
+                             for n in self.lista_personajes_csv: 
+                                 print(f"{contador_2}.{n.name}")        #Mostrar los personajes
+                                 contador_2+=1
+                             escoger_nuevo=int(input("Ingrese el numero del personaje nuevo para el cambio: "))
+                             personaje_cambiar=self.lista_personajes_csv[escoger_nuevo-1]
+                             if personaje_cambiar in mision_seleccionada.integrantes:      #En caso de que ya se tenga el personaje en la mision
+                                 print("Ya se tiene este personaje en la mision")
+                                 break
+                             else:
+                                 mision_seleccionada.integrantes[escoger_cambio-1]=personaje_cambiar
+                                 break
+                         except:
+                             print("Ingrese una opcion valida")
                  else:
-                     mision_seleccionada.integrantes[escoger_cambio-1]=personaje_cambiar
+                     print("No se tienen integrantes en la mision")
              
          elif cambiar==5:   #Opcion para modificar armas
-             modificar=int(input("Que accion desea realizar \n1-->Agregar Arma \n2-->Eliminar Arma \n3-->Cambiar Arma \n-->"))
-             contador=1
-             for n in mision_seleccionada.armas:  #Mostrar armas de la mision
-                 print(f"{contador}.{n.name}")
-                 contador+=1
+             while True:
+                 try:
+                     modificar=int(input("Que accion desea realizar \n1-->Agregar Arma \n2-->Eliminar Arma \n3-->Cambiar Arma \n-->"))
+                     contador=1
+                     for n in mision_seleccionada.armas:  #Mostrar armas de la mision
+                         print(f"{contador}.{n.name}")
+                         contador+=1
+                     break
+                 except:
+                     print("Ingrese una opcion valida")
 
              if modificar==1: #En caso de que se desee agregar un arma
                  contador_1=1
@@ -601,29 +649,57 @@ Ingrese una opcion del menú principal:
                      for n in self.lista_armas:   #Mostrar armas
                          print(f"{contador_1}.{n.name}")
                          contador_1+=1
-                     escoger_arma=int(input("Seleccione el numero del arma que desea agregar: "))
-                     agregar_arma=self.lista_armas[escoger_arma-1]
-                     mision_seleccionada.armas.append(agregar_arma)
+                     while True:
+                         try:
+                             escoger_arma=int(input("Seleccione el numero del arma que desea agregar: "))
+                             agregar_arma=self.lista_armas[escoger_arma-1]
+                             mision_seleccionada.armas.append(agregar_arma)
+                             break
+                         except:
+                             print("Ingrese una opcion valida")
                  else:
                      print("Ya tiene el maximo de armas posibles")  #En caso de ya tener el limite de armas
 
              elif modificar==2: #En caso que se desee eliminar un arma
-                 escoger_eliminar=int(input("Ingrese el numero del arma que desee eliminar"))
-                 mision_seleccionada.armas.pop(escoger_eliminar-1)
+                 if len(mision_seleccionada.armas)>0:
+                     while True:
+                         try:
+                             escoger_eliminar=int(input("Ingrese el numero del arma que desee eliminar"))
+                             mision_seleccionada.armas.pop(escoger_eliminar-1)
+                             break
+                         except:
+                             print("Ingrese una opcion valida")
+                 else:
+                     print("No se tienen armas en la mision")
         
              elif modificar==3: #En caso de que se desee cambiar un arma
-                 escoger_cambio=int(input("Ingrese el numero del arma que desea cambiar: "))
-                 contador_2=1
-                 for n in self.lista_armas:
-                     print(f"{contador_2}.{n.name}")
-                     contador_2+=1
-                 escoger_nuevo=int(input("Ingrese el numero del arma nueva para el cambio: "))
-                 arma_cambiar=self.lista_armas[escoger_nuevo-1]
-                 mision_seleccionada.armas[escoger_cambio-1]=arma_cambiar
+                 if len(mision_seleccionada.armas)>0:
+                     while True:
+                         try:
+                             escoger_cambio=int(input("Ingrese el numero del arma que desea cambiar: "))
+                             contador_2=1
+                             for n in self.lista_armas:
+                                 print(f"{contador_2}.{n.name}")
+                                 contador_2+=1
+                             escoger_nuevo=int(input("Ingrese el numero del arma nueva para el cambio: "))
+                             arma_cambiar=self.lista_armas[escoger_nuevo-1]
+                             mision_seleccionada.armas[escoger_cambio-1]=arma_cambiar
+                             break
+                         except:
+                             print("Ingrese una opcion valida")
+                 else:
+                     print("No se tienen armas en la mision")
 
-         continuar=input("Desea modificar otra aspecto de la mision? \nsi \nno \n---> ")
+         while True:
+             continuar=input("Desea modificar otra aspecto de la mision? \nsi \nno \n---> ")
+             if continuar=="no":
+                 break
+             elif continuar=="si":
+                 break
+             else:
+                 print("Ingrese si o no")
          if continuar=="no":
-            break
+             break
   
   def visualizar_mision(self):
      print("--------------------------LISTA DE MISIONES----------------------")
