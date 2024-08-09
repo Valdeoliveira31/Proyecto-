@@ -1,0 +1,90 @@
+[
+   {
+      "nombre_mision": "Salvar a Maria Gabriela",
+      "planeta_destino": 5,
+      "nave": 1,
+      "integrantes": [
+         6,
+         2,
+         4
+      ],
+      "armas": [
+         "Lightsaber",
+         "DL-44 Blaster Pistol",
+         "E-11 Blaster Rifle"
+      ]
+   },
+   {
+      "nombre_mision": "Salvar a Lima",
+      "planeta_destino": 12,
+      "nave": 40,
+      "integrantes": [
+         1
+      ],
+      "armas": [
+         "DL-44 Blaster Pistol"
+      ]
+   },
+   {
+      "nombre_mision": "Hola",
+      "planeta_destino": 3,
+      "nave": 54,
+      "integrantes": [
+         12
+      ],
+      "armas": [
+         "DC-17 Hand Blaster"
+      ]
+   },
+   {
+      "nombre_mision": "Probando validadores",
+      "planeta_destino": 9,
+      "nave": 1,
+      "integrantes": [
+         1,
+         23
+      ],
+      "armas": [
+         "Lightsaber",
+         "DL-44 Blaster Pistol"
+      ]
+   },
+   {
+      "nombre_mision": "probando de nuevo",
+      "planeta_destino": 1,
+      "nave": 1,
+      "integrantes": [
+         1
+      ],
+      "armas": [
+         "E-11 Blaster Rifle"
+      ]
+   },
+   {
+      "nombre_mision": "de nuevo",
+      "planeta_destino": 13,
+      "nave": 30,
+      "integrantes": [
+         23,
+         12,
+         5
+      ],
+      "armas": [
+         "DC-17 Hand Blaster",
+         "DL-44 Blaster Pistol",
+         "Thermal Detonator"
+      ]
+   },
+   {
+      "nombre_mision": "reparar el error",
+      "planeta_destino": 4,
+      "nave": 34,
+      "integrantes": [
+         12,
+         13
+      ],
+      "armas": [
+         "DC-17 Hand Blaster"
+      ]
+   }
+]
