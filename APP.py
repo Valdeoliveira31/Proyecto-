@@ -90,6 +90,7 @@ Ingrese una opcion del menú principal:
       elif opcion == "13":
         self.visualizar_mision()
       elif opcion=="14":
+         self.guardar_mision()
          break
       else:
                 print("Debe ingresar una opcion del menú.")
