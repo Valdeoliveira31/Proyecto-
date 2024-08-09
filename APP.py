@@ -32,10 +32,7 @@ class APP:
          self.crear_peliculas()
          self.crear_especies()
          self.asociar_especies_con_peliculas()
-         self.crear_planetas() #Borrar
-         self.asociar_planetas_con_peliculas() #Borrar
-         ruta_residetes = "csv/planets.csv" #Borrar
-         self.asociar_planeta_con_residentes(ruta_residetes) #Borrar
+         self.agregar_planetas()
          self.agregar_personaje()
          self.cargar_datos()
          self.cargar_mision()
@@ -148,38 +145,37 @@ Ingrese una opcion del menú principal:
            for especie in self.especie_obj:
               if especie.nombre == especie_name:  #Se compara los nombres de especies en nuestra lista de especies con los nombres de las especies en cada peli
                  especie.episodios.append(pelicula.titulo)  
+   
+  def agregar_planetas(self):
+      url= "https://swapi.dev/api/planets/"
+      while url:
+          response = requests.get(url)
+          data_url = response.json()
+          data = response.json()["results"]
+          for planeta in data:
+              nombre_planeta = planeta["name"]
+              periodo_orbita = planeta["orbital_period"]
+              periodo_rotacion = planeta["rotation_period"]
+              habitantes = planeta["population"]
+              clima = planeta["climate"]
+              lista_episodios = []
+              for url_episodio in planeta["films"]:
+                  if url_episodio:
+                      response_episodio = requests.get(url_episodio)
+                      data_episodio = response_episodio.json()
+                      lista_episodios.append(data_episodio["title"])
+                  else:
+                      lista_episodios.append("No aparece en ningun episodio")
+              lista_residentes=[]
+              for url_residente in planeta["residents"]:
+                  if url_residente:
+                      response_residente = requests.get(url_residente)
+                      data_residente = response_residente.json()
+                      lista_residentes.append(data_residente["name"])
+              self.planeta_obj.append(Planeta(nombre_planeta, periodo_orbita, periodo_rotacion, habitantes,clima,lista_episodios,lista_residentes))
+          url = data_url["next"]
+              
 
-  def crear_planetas(self): #BORRAR
-    url = "https://www.swapi.tech/api/planets/"
-    response = requests.get(url)
-    data = response.json()
-    for planeta in data["results"]:
-        URL_planeta = planeta["url"]
-        response_planeta =requests.get(URL_planeta)
-        data_planeta = response_planeta.json()["result"]["properties"]
-
-        nuevo_planeta = Planeta(data_planeta["name"],data_planeta["orbital_period"],data_planeta["rotation_period"],data_planeta["population"],data_planeta["climate"])
-
-        self.planeta_obj.append(nuevo_planeta)
-      
-  def asociar_planetas_con_peliculas(self): #BORRAR
-     for pelicula in self.pelicula_obj:
-        for planeta_name in pelicula.planetas:
-           for planeta in self.planeta_obj:
-              if planeta.nombre == planeta_name:
-                 planeta.episodios.append(pelicula.titulo)
-
-  
-  def asociar_planeta_con_residentes(self, csv_file): #BORRAR
-     with open(csv_file, newline= "", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-           planeta_nombre = row["name"]
-           residents = row["residents"].strip().split(", ")
-           for planeta in self.planeta_obj:
-              if planeta.nombre == planeta_nombre:
-                 planeta.residentes.extend(residents)
-        
   def agregar_personaje(self):
     url="https://swapi.dev/api/people"
     while url:
