@@ -17,4 +17,14 @@ class Personaje_CSV:
     def show_nombre(self):
         print(self.name)
 
-        
+    def show_datos(self):
+        print(f"""
+-----------------------------------DATOS DE {self.name}----------------------------------------
+>ID:{self.id}
+>Especie:{self.species}
+>Genero:{self.gender}     
+>Altura:{self.height}    >Peso:{self.weight}
+>Color de Pelo:{self.hair_color}    >Color de Ojos:{self.eye_color}     >Color de piel:{self.skin_color}
+>Nacimiento:{self.year_born}       >Pais de origen: {self.homeworld}    >Fallecimiento: {self.year_died}
+>Descripcion: {self.description}
+""")

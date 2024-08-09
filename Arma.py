@@ -12,5 +12,16 @@ class Arma:
 
     def show_nombre(self):
         print(self.name)
-        
+    
+    def show_datos(self):
+        print(f"""
+-----------------------------------DATOS DE {self.name}----------------------------------------
+>ID:{self.id}
+>Modelo:{self.model}
+>Fabricante:{self.manufacturer}
+>Cost in Credits: {self.cost_in_credits}
+>Longitud:{self.length}    >Tipo:{self.type}
+>Descripcion:{self.description}
+>Episodios de aparicion:{self.films}
+""")
     
