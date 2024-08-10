@@ -7,7 +7,6 @@ from Nave import Nave
 from Pelicula import Pelicula
 from Personaje import Personaje
 from Planeta import Planeta
-from Vehiculo import Vehiculo
 from Personaje_CSV import Personaje_CSV
 from Planeta_CSV import Planeta_CSV
 from Arma import Arma
@@ -236,9 +235,15 @@ Ingrese una opcion del menú principal:
      if len(lista_coinciden)==0:
          print("Ningun personaje coincide con su busqueda")
      else:
-      escoger_personaje=int(input("Seleccione el personaje"))
-      personaje_escogido=lista_coinciden[escoger_personaje-1]
-      personaje_escogido.show()
+      while True:
+          try:
+             escoger_personaje=int(input("Seleccione el personaje"))
+             personaje_escogido=lista_coinciden[escoger_personaje-1]
+             personaje_escogido.show()
+             break
+          except:
+              print("Ingrese una opcion valida")
+  
 
  #Funciones que muestran los graficos 
   def grafico_personas_nacidas(self):
@@ -487,6 +492,7 @@ Ingrese una opcion del menú principal:
          otra_mision=input("Desea crear una nueva mision? \nsi \nno \n---> ") 
          if otra_mision=="no":
              print("QUE LA FUERZA TE ACOMPAÑE")
+             self.i+=1
              break
          elif otra_mision=="si":
              self.i+=1
@@ -560,7 +566,7 @@ Ingrese una opcion del menú principal:
          elif cambiar==4: #Opcion para modificar los integrantes
              while True:
                  try:
-                     modificar=int(input("Que accion desea realizar \n1-->Agregar Integrante \n2-->Eliminar Integrante \n3-->Cambiar Integrante \n-->"))
+                     modificar=int(input("Que accion desea realizar \n1-->Agregar Integrante \n2-->Eliminar Integrante \n3-->Cambiar Integrante \n--> "))
                      break
                  except:
                      print("Ingrese una opcion valida")
@@ -594,7 +600,7 @@ Ingrese una opcion del menú principal:
                  if len(mision_seleccionada.integrantes)>0:
                      while True:
                          try:
-                             escoger_eliminar=int(input("Ingrese el numero del personaje que desee eliminar"))
+                             escoger_eliminar=int(input("Ingrese el numero del personaje que desee eliminar: "))
                              mision_seleccionada.integrantes.pop(escoger_eliminar-1)
                              break
                          except:
@@ -628,7 +634,7 @@ Ingrese una opcion del menú principal:
          elif cambiar==5:   #Opcion para modificar armas
              while True:
                  try:
-                     modificar=int(input("Que accion desea realizar \n1-->Agregar Arma \n2-->Eliminar Arma \n3-->Cambiar Arma \n-->"))
+                     modificar=int(input("Que accion desea realizar \n1-->Agregar Arma \n2-->Eliminar Arma \n3-->Cambiar Arma \n--> "))
                      contador=1
                      for n in mision_seleccionada.armas:  #Mostrar armas de la mision
                          print(f"{contador}.{n.name}")
@@ -660,7 +666,7 @@ Ingrese una opcion del menú principal:
                  if len(mision_seleccionada.armas)>0:
                      while True:
                          try:
-                             escoger_eliminar=int(input("Ingrese el numero del arma que desee eliminar"))
+                             escoger_eliminar=int(input("Ingrese el numero del arma que desee eliminar: "))
                              mision_seleccionada.armas.pop(escoger_eliminar-1)
                              break
                          except:
@@ -705,35 +711,46 @@ Ingrese una opcion del menú principal:
          n.show_datos()
          contador+=1
      print("-------------------------------------------------------------------------------")
-     while True:
-         try:
-             escoger=int(input("Seleccione la mision que desee visualizar a detalle: "))
-             mision_escogida=self.lista_misiones[escoger-1]
-             while True:
-                 ver=int(input("Que elemento deseas ver a detalle \n1-->Planeta Destino \n2-->Detalle de integrantes \n3-->Detalle Armas \n4-->Detalle Nave \n--> "))
-                 if ver==1:
-                     mision_escogida.planeta_destino.show_datos()
-                     break
-                 elif ver==2:
-                     for i in mision_escogida.integrantes:
-                         i.show_datos()
-                     print("-----------------------------------------------------------------------------------------------------")
-                     break
-                 elif ver==3:
-                     for i in mision_escogida.armas:
-                         i.show_datos()
-                     print("-------------------------------------------------------------------------------------------------------")
-                     break
-                 elif ver==4:
-                     mision_escogida.nave.show_datos()
-                     break
-                 else:
+     if len(self.lista_misiones)==0:
+         print("No se han guardado misiones aun")
+     else:
+         while True:
+             try:
+                 escoger=int(input("Seleccione la mision que desee visualizar a detalle: "))
+                 mision_escogida=self.lista_misiones[escoger-1]
+                 while True:
+                     ver=int(input("Que elemento deseas ver a detalle \n1-->Planeta Destino \n2-->Detalle de integrantes \n3-->Detalle Armas \n4-->Detalle Nave \n--> "))
+                     if ver==1:
+                         mision_escogida.planeta_destino.show_datos()
+                         break
+                     elif ver==2:
+                         for i in mision_escogida.integrantes:
+                             i.show_datos()
+                         print("-----------------------------------------------------------------------------------------------------")
+                         break
+                     elif ver==3:
+                         for i in mision_escogida.armas:
+                             i.show_datos()
+                         print("-------------------------------------------------------------------------------------------------------")
+                         break
+                     elif ver==4:
+                         mision_escogida.nave.show_datos()
+                         break
+                     else:
                          print("ingrese una opcion valida")
-             continuar=input("Desea ver de nuevo los detalles de una mision? \nsi \nno \n---> ")
-             if continuar=="no":
-                 break
-         except:
-             print("Ingrese una opcion valida")
+                
+                 while True:
+                     continuar=input("Desea ver de nuevo los detalles de una mision? \nsi \nno \n---> ")
+                     if continuar=="no":
+                         break
+                     elif continuar=="si":
+                         break
+                     else:
+                         print("Ingrese si o no")
+                 if continuar=="no":
+                     break
+             except:
+                 print("Ingrese una opcion valida")
 
   def guardar_mision(self):
      lista_dic_misiones=[]
