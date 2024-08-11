@@ -1,0 +1,26 @@
+[
+   {
+      "nombre_mision": "Hola",
+      "planeta_destino": 1,
+      "nave": 2,
+      "integrantes": [
+         34,
+         5
+      ],
+      "armas": [
+         6,
+         7
+      ]
+   },
+   {
+      "nombre_mision": "chao",
+      "planeta_destino": 3,
+      "nave": 30,
+      "integrantes": [
+         6
+      ],
+      "armas": [
+         8
+      ]
+   }
+]

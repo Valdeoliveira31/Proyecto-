@@ -7,7 +7,8 @@ from Mision import Mision
 import json
 
 
-
+prueba=int(-1)
+print(prueba)
 lista_planetas=[]
 lista_naves=[]
 lista_armas=[]
@@ -39,7 +40,6 @@ def cargar_datos():
       for index,per in personajes.iterrows():
          lista_personajes.append(Personaje_CSV(per["id"],per["name"],per["species"],per["gender"],per["height"],per["weight"],per["hair_color"],per["eye_color"],per["skin_color"],per["year_born"],per["homeworld"],per["year_died"],per["description"]))
 
-cargar_datos()
 
 def cargar_mision():
      try:
@@ -82,7 +82,6 @@ def cargar_mision():
          archivo.close()
              
              
-cargar_mision()
 
 def crear_mision():
       #Bucle While para crear las misiones
@@ -383,7 +382,7 @@ def modificar_mision():
              break
          
 
-modificar_mision()
+
 
 def visualizar_mision():
      print("--------------------------LISTA DE MISIONES----------------------")
