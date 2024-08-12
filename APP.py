@@ -27,24 +27,45 @@ class APP:
   lista_armas=[]
   i=1
   def start(self):
+    
+    #Validadores de las funciones del cargado de informacion
     try:
          print("Cargando Peliculas")
          self.crear_peliculas()
+         print("Finalizado la carga de peliculas")
+    except:
+         print("No se realizo correctamente el cargado de peliculas")
+    try:
          print("Cargando Especies")
          self.crear_especies()
          self.asociar_especies_con_peliculas()
+         print("Finalizado el cargado de especies")
+    except:
+         print("No se realizo correctamente el cargado de especies")
+    try:
          print("Cargando Planetas")
          self.agregar_planetas()
+         print("Finalizado el cargado de planetas")
+    except:
+         print("No se realizo correctamente el cargado de planetas")
+    try:
          print("Cargando Personajes")
          self.agregar_personaje()
+         print("Finalizado el cargado de personajes")
+    except:
+         print("No se cargaron correctamente los personajes")
+    try:
          print("Cargando Datos de los CSV")
          self.cargar_datos()
          print("Cargando datos de las misiones txt")
          self.cargar_mision()
     except:
          print("No se pudieron cargar correctamente los datos")
+        
+   
     
     while True:
+      print()
       print("BIENVENIDOS A STAR WARS METROPEDIA")
       opcion=input("""
 Ingrese una opcion del menú principal: 
@@ -222,14 +243,22 @@ Ingrese una opcion del menú principal:
              else:
                  lista_vehiculos.append("No posee ningun vehiculo")
          if personaje["species"]:
-             especie_personaje=personaje["species"]
+             for i in personaje["species"]:
+                 response_especie=requests.get(i)
+                 data_especie=response_especie.json()
+                 especie_personaje=data_especie["name"]
          else:
              especie_personaje="Desconocido"
          self.persona_obj.append(Personaje(nombre_personaje,planeta_personaje,genero_personaje,lista_naves,lista_episodios,lista_vehiculos,especie_personaje))
      url=data_url["next"] 
   
   def buscar_personaje(self):
-     nombre = input("Introduzca los caracteres del personaje que desea buscar: ").lower()
+     while True:   
+         nombre = input("Introduzca los caracteres del personaje que desea buscar: ").lower()
+         if nombre:
+             break
+         else:
+             print("Ingrese por lo menos un caracter")
      contador =1
      lista_coinciden=[]
      print("Lista de personajes que coinciden con la busqueda")
@@ -793,17 +822,17 @@ Ingrese una opcion del menú principal:
              break
   
   def visualizar_mision(self):
-     print("--------------------------LISTA DE MISIONES----------------------")
-     contador=1
-     for n in self.lista_misiones:
-         print(f"-------------------------MISION {contador}--------------------------")
-         n.show_datos()
-         contador+=1
-     print("-------------------------------------------------------------------------------")
      if len(self.lista_misiones)==0:
          print("No se han guardado misiones aun")
      else:
          while True:
+             print("--------------------------LISTA DE MISIONES----------------------")
+             contador=1
+             for n in self.lista_misiones:
+                 print(f"-------------------------MISION {contador}--------------------------")
+                 n.show_datos()
+                 contador+=1
+             print("-------------------------------------------------------------------------------")
              try:
                  escoger=int(input("Seleccione la mision que desee visualizar a detalle: "))
                  if escoger<=0:
