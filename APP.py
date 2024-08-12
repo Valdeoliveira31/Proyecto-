@@ -85,6 +85,7 @@ Ingrese una opcion del menú principal:
     14.Salir  
 --->""")
       if opcion=="1":
+         self.pelicula_obj=sorted(self.pelicula_obj, key=lambda x: x.num_episodio)
          for pelicula in self.pelicula_obj:
             pelicula.show()
       elif opcion == "2":
